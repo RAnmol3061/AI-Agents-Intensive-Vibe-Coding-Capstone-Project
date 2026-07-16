@@ -17,14 +17,12 @@ def audio_extraction(filepath):
     mfcc_mean = np.mean(mfccs, axis=1)
     mfcc_std = np.std(mfccs, axis=1)
 
-    final_vector = np.concatenate(
-        (
-            chroma_mean,
-            chroma_std,  # 12 + 12 floats
-            [rms_mean, rms_std],  # 1 + 1 float
-            mfcc_mean,
-            mfcc_std,  # 20 + 20 float
-        )
+    np.savez_compressed(
+        file=filepath[:-3] + "npz",
+        arr1=chroma_mean,
+        arr2=chroma_std,
+        arr3=rms_mean,
+        arr4=rms_std,
+        arr5=mfcc_mean,
+        arr6=mfcc_std,
     )
-
-    return final_vector
