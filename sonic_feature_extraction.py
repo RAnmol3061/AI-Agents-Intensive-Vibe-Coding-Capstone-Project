@@ -1,8 +1,10 @@
+from pathlib import Path
+
 import librosa
 import numpy as np
 
 
-def audio_extraction(filepath):
+def audio_extraction(filepath: str) -> None:
     y, sr = librosa.load(filepath)
 
     chroma = librosa.feature.chroma_stft(y=y, sr=sr)
@@ -17,12 +19,15 @@ def audio_extraction(filepath):
     mfcc_mean = np.mean(mfccs, axis=1)
     mfcc_std = np.std(mfccs, axis=1)
 
-    np.savez_compressed(
-        file=filepath[:-3] + "npz",
-        arr1=chroma_mean,
-        arr2=chroma_std,
-        arr3=rms_mean,
-        arr4=rms_std,
-        arr5=mfcc_mean,
-        arr6=mfcc_std,
-    )
+    if Path(filepath[:-3] + "npz").is_file():
+        pass  # If the npz file already exist then nothing would trigger
+    else:
+        np.savez_compressed(
+            file=filepath[:-3] + "npz",
+            arr1=chroma_mean,
+            arr2=chroma_std,
+            arr3=rms_mean,
+            arr4=rms_std,
+            arr5=mfcc_mean,
+            arr6=mfcc_std,
+        )
